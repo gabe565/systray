@@ -167,7 +167,25 @@ withParentMenuId: (int)theParentMenuId
 }
 
 - (void)setTitle:(NSString *)title {
-  statusItem.button.title = title;
+  NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
+  [attributes setObject:[NSFont menuBarFontOfSize:0] forKey:NSFontAttributeName];
+  NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attributes];
+  statusItem.button.attributedTitle = attributedTitle;
+  [self updateTitleButtonStyle];
+}
+
+- (void)setTitleStrikethrough:(NSArray *)args {
+  NSString *title = [args objectAtIndex:0];
+  NSNumber *strikethrough = [args objectAtIndex:1];
+
+  NSMutableDictionary *attributes = [[NSMutableDictionary alloc] init];
+  [attributes setObject:[NSFont menuBarFontOfSize:0] forKey:NSFontAttributeName];
+  if ([strikethrough boolValue]) {
+    [attributes setObject:[NSNumber numberWithInteger:NSUnderlineStyleSingle] forKey:NSStrikethroughStyleAttributeName];
+    [attributes setObject:@0 forKey:NSBaselineOffsetAttributeName];
+  }
+  NSAttributedString *attributedTitle = [[NSAttributedString alloc] initWithString:title attributes:attributes];
+  statusItem.button.attributedTitle = attributedTitle;
   [self updateTitleButtonStyle];
 }
 
@@ -467,4 +485,12 @@ void reset_menu() {
 
 void quit() {
   runInMainThread(@selector(quit), nil);
+}
+
+void setTitleStrikethrough(char* ctitle, bool strikethrough) {
+  NSString* title = [[NSString alloc] initWithCString:ctitle
+                                             encoding:NSUTF8StringEncoding];
+  free(ctitle);
+  NSNumber *strk = [NSNumber numberWithBool:strikethrough];
+  runInMainThread(@selector(setTitleStrikethrough:), @[title, strk]);
 }

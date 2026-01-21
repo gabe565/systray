@@ -1020,6 +1020,11 @@ func SetTitle(title string) {
 	// do nothing
 }
 
+// SetTitleStrikethrough sets the systray title with strikethrough, only available on Mac.
+func SetTitleStrikethrough(title string, strikethrough bool) {
+	SetTitle(title)
+}
+
 func (item *MenuItem) parentId() uint32 {
 	if item.parent != nil {
 		return uint32(item.parent.id)

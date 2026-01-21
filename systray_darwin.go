@@ -109,6 +109,11 @@ func SetTitle(title string) {
 	C.setTitle(C.CString(title))
 }
 
+// SetTitleStrikethrough sets the systray title with strikethrough, only available on Mac.
+func SetTitleStrikethrough(title string, strikethrough bool) {
+	C.setTitleStrikethrough(C.CString(title), C.bool(strikethrough))
+}
+
 // SetTooltip sets the systray tooltip to display on mouse hover of the tray icon,
 // only available on Mac and Windows.
 func SetTooltip(tooltip string) {

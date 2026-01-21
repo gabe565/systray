@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"runtime"
 	"time"
 
 	"fyne.io/systray"
@@ -53,6 +54,21 @@ func onReady() {
 		mEnabled := systray.AddMenuItem("Enabled", "Enabled")
 		// Sets the icon of a menu item. Only available on Mac.
 		mEnabled.SetTemplateIcon(icon.Data, icon.Data)
+
+		if runtime.GOOS == "darwin" {
+			mStrikethrough := systray.AddMenuItemCheckbox("Strikethrough", "Toggle strikethrough on title", false)
+			go func() {
+				for range mStrikethrough.ClickedCh {
+					if mStrikethrough.Checked() {
+						mStrikethrough.Uncheck()
+						systray.SetTitleStrikethrough("Awesome App", false)
+					} else {
+						mStrikethrough.Check()
+						systray.SetTitleStrikethrough("Awesome App", true)
+					}
+				}
+			}()
+		}
 
 		systray.AddMenuItem("Ignored", "Ignored")
 
