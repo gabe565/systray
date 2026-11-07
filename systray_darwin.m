@@ -21,7 +21,7 @@
 #define SYSTRAY_MOD_ALT     (1 << 2)
 #define SYSTRAY_MOD_SUPER   (1 << 3)
 
-@interface MenuItem : NSObject
+@interface SystrayMenuItem : NSObject
 {
   @public
     NSNumber* menuId;
@@ -42,7 +42,7 @@ withShortcutMods: (unsigned int)theShortcutMods
     withDisabled: (short)theDisabled
      withChecked: (short)theChecked;
      @end
-     @implementation MenuItem
+     @implementation SystrayMenuItem
      -(id) initWithId: (int)theMenuId
      withParentMenuId: (int)theParentMenuId
             withTitle: (const char*)theTitle
@@ -99,7 +99,7 @@ withShortcutMods: (unsigned int)theShortcutMods
 
 
 @interface SystrayAppDelegate: NSObject <NSApplicationDelegate, NSMenuDelegate>
-  - (void) add_or_update_menu_item:(MenuItem*) item;
+  - (void) add_or_update_menu_item:(SystrayMenuItem*) item;
   - (IBAction)menuHandler:(id)sender;
   - (void)menuWillOpen:(NSMenu*)menu;
   @property (assign) IBOutlet NSWindow *window;
@@ -243,7 +243,7 @@ withShortcutMods: (unsigned int)theShortcutMods
   systray_menu_will_open();
 }
 
-- (void)add_or_update_menu_item:(MenuItem *)item {
+- (void)add_or_update_menu_item:(SystrayMenuItem *)item {
   NSMenu *theMenu = self->menu;
   NSMenuItem *parentItem;
   if ([item->parentMenuId integerValue] > 0) {
@@ -486,7 +486,7 @@ void setRemovalAllowed(bool allowed) {
 }
 
 void add_or_update_menu_item(int menuId, int parentMenuId, char* title, char* tooltip, char* shortcutKey, unsigned int shortcutMods, short disabled, short checked, short isCheckable) {
-  MenuItem* item = [[MenuItem alloc] initWithId: menuId withParentMenuId: parentMenuId withTitle: title withTooltip: tooltip withShortcutKey: shortcutKey withShortcutMods: shortcutMods withDisabled: disabled withChecked: checked];
+  SystrayMenuItem* item = [[SystrayMenuItem alloc] initWithId: menuId withParentMenuId: parentMenuId withTitle: title withTooltip: tooltip withShortcutKey: shortcutKey withShortcutMods: shortcutMods withDisabled: disabled withChecked: checked];
   free(title);
   free(tooltip);
   free(shortcutKey);
