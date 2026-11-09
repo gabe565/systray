@@ -22,6 +22,10 @@ var (
 
 	// TrayOpenedCh receives an entry each time the system tray menu is opened.
 	TrayOpenedCh = make(chan struct{})
+
+	// ReopenedCh receives an entry when the app is launched again while it's
+	// already running. Only available on Mac; nil on other platforms.
+	ReopenedCh chan struct{}
 )
 
 // This helper function allows us to call systrayExit only once,

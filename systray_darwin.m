@@ -160,6 +160,13 @@ withShortcutMods: (unsigned int)theShortcutMods
   systray_ready();
 }
 
+// Called when the app is launched again while it's already running, e.g. from
+// Finder or Spotlight. macOS doesn't start a second process in that case.
+- (BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag {
+  systray_reopen();
+  return YES;
+}
+
 - (void)rightMouseClicked {
   systray_right_click();
 }

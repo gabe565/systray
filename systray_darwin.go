@@ -270,3 +270,15 @@ func systray_menu_will_open() {
 	default:
 	}
 }
+
+func init() {
+	ReopenedCh = make(chan struct{}, 1)
+}
+
+//export systray_reopen
+func systray_reopen() {
+	select {
+	case ReopenedCh <- struct{}{}:
+	default:
+	}
+}
